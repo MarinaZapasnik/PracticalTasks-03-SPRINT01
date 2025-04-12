@@ -48,7 +48,12 @@ export const App = ()=> {
                 tasks={tasksForTodolist}
                 removeTask={removeTask}
                 changeFilter={changeFilter}
-                addTask={addTask} />
+                addTask={addTask} 
+                >
+                  <div>
+                    <div>Many interesting information</div>
+                  </div>
+      </Todolist>
     </div>
   );
 }

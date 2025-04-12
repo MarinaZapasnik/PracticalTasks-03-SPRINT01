@@ -1,4 +1,4 @@
-import {ChangeEvent, KeyboardEvent, useRef, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useRef, useState} from 'react';
 import {FilterValuesType} from './App';
 
 type TaskType = {
@@ -13,22 +13,28 @@ type PropsType = {
   removeTask: (taskId: string) => void
   changeFilter: (value: FilterValuesType) => void
   addTask: (title: string) => void
+  children: React.ReactNode
+  
 }
 
 export const Todolist = (props: PropsType)=> {
-  let [title, setTitle] = useState("")
+  //let [title, setTitle] = useState("")
+
+  const titleRef = useRef<HTMLInputElement>(null)
 
   const addTask = () => {
-    props.addTask(title);
-    setTitle("");
+    if (titleRef.current && titleRef.current.value) {
+      props.addTask(titleRef.current.value);
+      titleRef.current.value = "";
+    }
   }
 
   const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.currentTarget.value)
+    //setTitle(e.currentTarget.value)
   }
 
 
-  const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       addTask();
     }
@@ -41,9 +47,9 @@ export const Todolist = (props: PropsType)=> {
   return <div>
     <h3>{props.title}</h3>
     <div>
-      <input value={title}
+      <input ref={titleRef}
              onChange={onChangeHandler}
-             onKeyPress={onKeyPressHandler}
+             onKeyDown={onKeyDownHandler}
       />
       <button onClick={addTask}>+</button>
     </div>
@@ -66,5 +72,6 @@ export const Todolist = (props: PropsType)=> {
       <button onClick={onActiveClickHandler}>Active</button>
       <button onClick={onCompletedClickHandler}>Completed</button>
     </div>
+    <div>{props.children}</div>
   </div>
 }
